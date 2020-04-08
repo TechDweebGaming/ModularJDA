@@ -2,16 +2,21 @@ package io.github.techdweebgaming.modularjda.api;
 
 import io.github.techdweebgaming.modularjda.api.configs.ConfigurationManager;
 import io.github.techdweebgaming.modularjda.api.configs.baseConfigs.CoreConfig;
+import io.github.techdweebgaming.modularjda.api.events.EventListenerContainerConsumer;
+import io.github.techdweebgaming.modularjda.api.events.EventRegistry;
 import io.github.techdweebgaming.modularjda.api.exceptions.DefaultNotFoundException;
 import io.github.techdweebgaming.modularjda.api.exceptions.NotInitializedException;
 import io.github.techdweebgaming.modularjda.api.logger.Logger;
+import io.github.techdweebgaming.modularjda.internal.registries.CommandRegistryContainer;
 import io.github.techdweebgaming.modularjda.internal.registries.ModuleRegistry;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class ModularJDABot {
 
@@ -24,7 +29,7 @@ public class ModularJDABot {
     }
 
     private JDABuilder builder;
-    private ConfigurationManager<CoreConfig> coreConfig;
+    private ConfigurationManager<? extends CoreConfig> coreConfig;
     private Optional<JDA> bot;
 
     private ModularJDABot() {
@@ -54,6 +59,15 @@ public class ModularJDABot {
             throw e;
         }
         Logger.logInfo("JDA Bot Initialized!");
+        Logger.logInfo("Preparing Registries...");
+        // Prepare Command Registry
+        CommandRegistryContainer.initialize(settings.commandRegistry);
+        // Register the listener as a JDA listener
+        bot.get().addEventListener(EventRegistry.getInstance());
+        // Register the command registry with the multithreaded listener
+        Consumer<MessageReceivedEvent> commandListenerConsumer = event -> CommandRegistryContainer.getInstance().get().messageReceived(event);
+        EventRegistry.getInstance().registerListener(new EventListenerContainerConsumer(commandListenerConsumer, MessageReceivedEvent.class));
+        Logger.logInfo("Registries Prepared!");
         Logger.logInfo("Initializing Modules...");
         ModuleRegistry.getInstance().initialize();
         Logger.logInfo("Modules Initialized!");
@@ -62,6 +76,10 @@ public class ModularJDABot {
 
     public JDA getBot() throws NotInitializedException {
         return bot.orElseThrow(() -> new NotInitializedException("Attempted to fetch bot object before it was constructed."));
+    }
+
+    public CoreConfig getConfig() throws NotInitializedException {
+        return coreConfig.getConfig();
     }
 
 }

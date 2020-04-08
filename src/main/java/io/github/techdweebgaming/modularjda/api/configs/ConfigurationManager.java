@@ -3,7 +3,7 @@ package io.github.techdweebgaming.modularjda.api.configs;
 import com.electronwill.nightconfig.core.ConfigSpec;
 import com.electronwill.nightconfig.core.conversion.Path;
 import io.github.techdweebgaming.modularjda.api.exceptions.DefaultNotFoundException;
-import io.github.techdweebgaming.modularjda.internal.types.Tuple;
+import io.github.techdweebgaming.modularjda.api.types.Tuple;
 import org.reflections.ReflectionUtils;
 
 import java.lang.reflect.Field;

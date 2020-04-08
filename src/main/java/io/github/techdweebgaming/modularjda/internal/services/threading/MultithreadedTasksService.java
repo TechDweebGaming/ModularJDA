@@ -1,4 +1,4 @@
-package io.github.techdweebgaming.modularjda.internal.services;
+package io.github.techdweebgaming.modularjda.internal.services.threading;
 
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -7,21 +7,17 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.function.Consumer;
 
-public class MultithreadedTasksService<T> implements Closeable {
+public class MultithreadedTasksService implements Closeable {
 
     private ThreadPoolExecutor executor;
     private List<Future<?>> futures;
 
-    public MultithreadedTasksService(int numThreads, Consumer<T> executable, Collection<T> collection) {
+    public MultithreadedTasksService(int numThreads, Collection<Runnable> tasks) {
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(numThreads);
         futures = new ArrayList<>();
 
-        for(T t : collection) {
-            Future<?> future = executor.submit(() -> executable.accept(t));
-            futures.add(future);
-        }
+        for(Runnable task : tasks) futures.add(executor.submit(task));
     }
 
     public boolean complete() {

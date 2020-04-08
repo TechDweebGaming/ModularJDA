@@ -1,11 +1,14 @@
 package io.github.techdweebgaming.modularjda.internal.registries;
 
+import io.github.techdweebgaming.modularjda.api.exceptions.DefaultNotFoundException;
+import io.github.techdweebgaming.modularjda.api.exceptions.NotInitializedException;
 import io.github.techdweebgaming.modularjda.api.modules.ModuleClass;
 import io.github.techdweebgaming.modularjda.api.modules.IModule;
 import io.github.techdweebgaming.modularjda.api.logger.Logger;
-import io.github.techdweebgaming.modularjda.internal.services.MultithreadedTasksService;
+import io.github.techdweebgaming.modularjda.internal.services.threading.ConsumerOverCollectionService;
 import org.reflections.Reflections;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +46,13 @@ public class ModuleRegistry {
         }
 
         // Instantiate all modules
-        try(MultithreadedTasksService<IModule> moduleInstantiator = new MultithreadedTasksService<>(3, (IModule module) -> module.initialize(), modules)) {
+        try(ConsumerOverCollectionService<IModule> moduleInstantiator = new ConsumerOverCollectionService<>(3, (IModule module) -> {
+            try {
+                module.initialize();
+            } catch (IllegalAccessException | DefaultNotFoundException | IOException | NotInitializedException e) {
+                Logger.logError(String.format("Caught exception \"%s\" attempting to initialize module \"s\"!", e.getClass().getSimpleName(), module.getClass().getSimpleName()));
+            }
+        }, modules)) {
             while(!moduleInstantiator.complete());
         }
     }

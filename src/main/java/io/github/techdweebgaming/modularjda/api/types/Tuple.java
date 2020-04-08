@@ -1,4 +1,4 @@
-package io.github.techdweebgaming.modularjda.internal.types;
+package io.github.techdweebgaming.modularjda.api.types;
 
 public class Tuple<K, V> {
 

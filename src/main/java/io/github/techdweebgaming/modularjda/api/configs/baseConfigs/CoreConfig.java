@@ -10,4 +10,8 @@ public class CoreConfig implements IConfig {
     @ConfigSpecEntry
     public String token;
 
+    @Path("bot.prefix")
+    @ConfigSpecEntry(defaultValue = "!")
+    public String prefix;
+
 }
