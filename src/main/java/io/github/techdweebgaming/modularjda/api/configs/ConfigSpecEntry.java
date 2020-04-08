@@ -8,6 +8,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ConfigSpecEntry {
-    String defaultValue() default "";
-    boolean defaultInClass() default false;
 }

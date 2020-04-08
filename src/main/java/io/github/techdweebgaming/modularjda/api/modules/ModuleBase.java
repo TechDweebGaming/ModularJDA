@@ -27,7 +27,7 @@ public abstract class ModuleBase<T extends IConfig> implements IModule {
         }
     }
 
-    public void initialize() throws DefaultNotFoundException, IOException, IllegalAccessException, NotInitializedException {
+    public void initialize() throws DefaultNotFoundException, IOException, IllegalAccessException, NotInitializedException, InstantiationException {
         logInfo("Initializing Module...");
         if(configManager.isPresent()) configManager.get().loadConfig();
         registerListeners(EventRegistry.getInstance());

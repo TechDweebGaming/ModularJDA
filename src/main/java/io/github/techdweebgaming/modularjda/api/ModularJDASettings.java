@@ -20,6 +20,7 @@ public class ModularJDASettings {
 
         public ModularJDASettingsBuilder(CommandRegistryBase commandRegistry) {
             this.commandRegistry = commandRegistry;
+            coreConfigClass = CoreConfig.class;
         }
 
         public ModularJDASettingsBuilder setCoreConfigClass(Class<? extends CoreConfig> clazz) {

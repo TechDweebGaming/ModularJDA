@@ -24,13 +24,13 @@ public abstract class ConfigurationManagerBase<T extends IConfig> {
         config = Optional.empty();
     }
 
-    protected abstract ConfigSpec getConfigSpec() throws IllegalAccessException, DefaultNotFoundException;
+    protected abstract ConfigSpec getConfigSpec() throws IllegalAccessException, DefaultNotFoundException, InstantiationException;
 
     public T getConfig() throws NotInitializedException {
         return config.orElseThrow(() -> new NotInitializedException(String.format("Attempted to access the config \"%s\" without first loading it!", name)));
     }
 
-    public void loadConfig() throws IllegalAccessException, DefaultNotFoundException, IOException {
+    public void loadConfig() throws IllegalAccessException, DefaultNotFoundException, IOException, InstantiationException {
         File configFolder = new File("configs");
         if(!configFolder.exists()) configFolder.mkdirs();
         FileConfig configFile = FileConfig.of("configs" + File.separator + name + ".toml");
@@ -46,7 +46,10 @@ public abstract class ConfigurationManagerBase<T extends IConfig> {
             Logger.logFatal(String.format("Config \"%s\" contains a non-public field. Please ensure all config fields are public!", name));
             throw e;
         } catch (DefaultNotFoundException e) {
-            Logger.logFatal(String.format("Config \"%s\" does not contain appropriate default value fields!"));
+            Logger.logFatal(String.format("Config \"%s\" does not contain appropriate default value fields!", name));
+            throw e;
+        } catch (InstantiationException e) {
+            Logger.logFatal(String.format("Config \"%s\" does not contain an empty constructor and default values on all fields!", name));
             throw e;
         }
 

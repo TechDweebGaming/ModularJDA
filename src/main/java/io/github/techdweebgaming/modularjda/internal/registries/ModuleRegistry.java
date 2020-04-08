@@ -49,7 +49,7 @@ public class ModuleRegistry {
         try(ConsumerOverCollectionService<IModule> moduleInstantiator = new ConsumerOverCollectionService<>(3, (IModule module) -> {
             try {
                 module.initialize();
-            } catch (IllegalAccessException | DefaultNotFoundException | IOException | NotInitializedException e) {
+            } catch (IllegalAccessException | DefaultNotFoundException | IOException | NotInitializedException | InstantiationException e) {
                 Logger.logError(String.format("Caught exception \"%s\" attempting to initialize module \"s\"!", e.getClass().getSimpleName(), module.getClass().getSimpleName()));
             }
         }, modules)) {

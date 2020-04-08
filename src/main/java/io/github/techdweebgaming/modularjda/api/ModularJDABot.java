@@ -34,16 +34,16 @@ public class ModularJDABot {
 
     private ModularJDABot() {
         bot = Optional.empty();
-        coreConfig = new ConfigurationManager<>(CoreConfig.class, "core");
     }
 
     public void setBot(JDABuilder builder) {
         this.builder = builder;
     }
 
-    public void initialize(ModularJDASettings settings) throws IllegalAccessException, DefaultNotFoundException, NotInitializedException, InterruptedException, LoginException, IOException {
+    public void initialize(ModularJDASettings settings) throws IllegalAccessException, DefaultNotFoundException, NotInitializedException, InterruptedException, LoginException, IOException, InstantiationException {
         Logger.logInfo("Beginning ModularJDA Initialization...");
         Logger.logInfo("Loading Core Config...");
+        coreConfig = new ConfigurationManager<>(settings.coreConfigClass, "core");
         coreConfig.loadConfig();
         Logger.logInfo("Core Config Loaded!");
         Logger.logInfo("Starting JDA Bot...");

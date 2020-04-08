@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface IModule {
 
-    void initialize() throws DefaultNotFoundException, IOException, IllegalAccessException, NotInitializedException;
+    void initialize() throws DefaultNotFoundException, IOException, IllegalAccessException, NotInitializedException, InstantiationException;
 
     Optional<? extends ConfigurationManager> getConfigManager();
 
