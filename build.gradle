@@ -1,9 +1,10 @@
 plugins {
     id 'java-library'
     id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.jfrog.bintray' version '1.8.5'
+    id 'maven'
+    id 'maven-publish'
 }
-
-
 
 group 'io.github.techdweebgaming'
 version '1.0.0'
@@ -21,4 +22,77 @@ dependencies {
     implementation 'org.reflections:reflections:0.9.12'
     implementation 'com.electronwill.night-config:core:3.6.0'
     implementation 'com.electronwill.night-config:toml:3.6.0'
+}
+
+Properties properties = new Properties();
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+shadowJar {
+    exclude 'io/github/techdweebgaming/modularjda/test/**'
+}
+
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "techdweebgaming"
+            name "techdweebgaming"
+            email "nomail@dontemailme.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/TechDweebGaming/ModularJDA"
+    }
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) {
+            project.shadow.component(it)
+            artifact sourcesJar {
+                exclude 'io/github/techdweebgaming/modularjda/test/**'
+            }
+            artifact javadocJar {
+                exclude 'io/github/techdweebgaming/modularjda/test/**'
+            }
+            groupId 'io.github.techdweebgaming'
+            artifactId 'modularjda'
+            version '1.0.0'
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'A modular command library designed to improve the development experience of JDA.')
+                root.appendNode('name', 'ModularJDA')
+                root.appendNode('url', 'https://github.com/TechDweebGaming/ModularJDA')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apiKey')
+    pkg {
+        repo = 'ModularJDA'
+        name = 'ModularJDA'
+        version {
+            name = '1.0.0'
+            released = new Date()
+            vcsTag = '1.0.0'
+        }
+        publications = ['shadow']
+    }
 }
