@@ -16,6 +16,9 @@ public abstract class CommandElementBuilderBase<T extends CommandElementBase, U 
         this.name = name;
         this.description = description;
         this.converter = converter;
+        minLength = -1;
+        maxLength = -1;
+        optional = false;
     }
 
     public U setOptional(boolean optional) {

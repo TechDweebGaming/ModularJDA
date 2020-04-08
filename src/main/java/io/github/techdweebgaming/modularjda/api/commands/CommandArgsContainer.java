@@ -14,7 +14,7 @@ public class CommandArgsContainer {
     }
 
     public void put(String key, Optional<?> value) {
-        args.put(key, value);
+        args.put(key.toLowerCase(), value);
     }
 
     public <T> T get(String key) {
