@@ -15,11 +15,6 @@ public class CommandArgument<T> extends CommandElementBase<T, Queue<String>> {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public Tuple<Optional<T>, Queue<String>> consumeCommand(Queue<String> command) throws ArgumentNotPresentException {
         String argument = command.peek();
         boolean valid = argument != null && argument.length() >= minLength;

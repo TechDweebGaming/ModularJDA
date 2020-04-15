@@ -31,5 +31,11 @@ public abstract class CommandElementBase<T, S extends Collection<String>> {
     public String getName() {
         return name;
     }
+    public String getDescription() {
+        return description;
+    }
+    public Boolean getOptional() {
+        return optional;
+    }
 
 }

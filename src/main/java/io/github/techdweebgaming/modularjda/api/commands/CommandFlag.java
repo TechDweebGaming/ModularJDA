@@ -21,6 +21,14 @@ public class CommandFlag<T> extends CommandElementBase<T, List<String>> {
         this.hasValue = hasValue;
     }
 
+    public String getFlag() {
+        return flag;
+    }
+
+    public boolean hasValue() {
+        return hasValue;
+    }
+
     @Override
     public Tuple<Optional<T>, List<String>> consumeCommand(List<String> command) throws ArgumentNotPresentException {
         List<String> caseInsensitiveCommand = command.stream().map(String::toLowerCase).collect(Collectors.toList());
@@ -51,11 +59,6 @@ public class CommandFlag<T> extends CommandElementBase<T, List<String>> {
             if(optional) return new Tuple<>(Optional.empty(), command);
             throw new ArgumentNotPresentException();
         }
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public static class CommandFlagBuilder<T> extends CommandElementBuilderBase<CommandFlag<T>, CommandFlag.CommandFlagBuilder, T> {
