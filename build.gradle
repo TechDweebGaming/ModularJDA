@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.techdweebgaming'
-version '1.0.1'
+version '1.0.2'
 
 sourceCompatibility = 1.8
 
@@ -70,7 +70,7 @@ publishing {
             }
             groupId 'io.github.techdweebgaming'
             artifactId 'modularjda'
-            version '1.0.1'
+            version '1.0.2'
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', 'A modular command library designed to improve the development experience of JDA.')
@@ -89,9 +89,9 @@ bintray {
         repo = 'ModularJDA'
         name = 'ModularJDA'
         version {
-            name = '1.0.1'
+            name = '1.0.2'
             released = new Date()
-            vcsTag = '1.0.1'
+            vcsTag = '1.0.2'
         }
         publications = ['shadow']
     }
