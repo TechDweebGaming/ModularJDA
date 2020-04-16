@@ -17,8 +17,9 @@ public class CommandArgumentUser extends CommandArgument<String> {
     @Override
     public Tuple<Optional<String>, Queue<String>> consumeCommand(Queue<String> command) throws ArgumentNotPresentException {
         String argument = command.peek();
-        if(!(argument == null || !argument.matches("<@!\\d+>")))
+        if(!(argument == null || !argument.matches("<@!?\\d+>"))) {
             return new Tuple(Optional.of(command.poll().replaceAll("[<@!>]", "")), command);
+        }
 
         if(optional) return new Tuple(Optional.empty(), command);
         else throw new ArgumentNotPresentException();
