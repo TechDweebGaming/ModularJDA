@@ -6,8 +6,10 @@ plugins {
     id 'maven-publish'
 }
 
+def libVersion = '1.0.3'
+
 group 'io.github.techdweebgaming'
-version '1.0.2'
+version libVersion
 
 sourceCompatibility = 1.8
 
@@ -70,7 +72,7 @@ publishing {
             }
             groupId 'io.github.techdweebgaming'
             artifactId 'modularjda'
-            version '1.0.2'
+            version libVersion
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', 'A modular command library designed to improve the development experience of JDA.')
@@ -89,9 +91,9 @@ bintray {
         repo = 'ModularJDA'
         name = 'ModularJDA'
         version {
-            name = '1.0.2'
+            name = libVersion
             released = new Date()
-            vcsTag = '1.0.2'
+            vcsTag = libVersion
         }
         publications = ['shadow']
     }
